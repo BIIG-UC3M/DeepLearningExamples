@@ -104,7 +104,9 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     # )
 
     counter = tf.data.Dataset.range(sys.maxsize)
+    print("ds before", ds)
     ds = tf.data.Dataset.zip((ds, counter))
+    print("ds after", ds)
 
     def preproc_func(record, counter_):
         return image_processing.preprocess_image_record(record, height, width, _NUM_CHANNELS, training)
