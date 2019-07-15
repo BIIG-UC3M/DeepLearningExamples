@@ -93,7 +93,7 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     if hvd_utils.is_using_hvd() and training:
         ds = ds.shard(hvd.size(), hvd.rank())
 
-    ds = tf.data.Dataset.interleave(tf.data.TFRecordDataset, cycle_length=10, block_length=8, num_parallel_calls=8)
+    ds = ds.interleave(tf.data.TFRecordDataset, cycle_length=10, block_length=8, num_parallel_calls=8)
 
     # ds = ds.apply(
     #     tf.data.experimental.parallel_interleave(
