@@ -128,6 +128,7 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     )
 
     ds = ds.prefetch(buffer_size=tf.contrib.data.AUTOTUNE)
+    #ds = ds.prefetch(None)
 
     return ds
 
