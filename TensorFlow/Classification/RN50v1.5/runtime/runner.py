@@ -218,6 +218,7 @@ class Runner(object):
 
             if hvd_utils.is_using_hvd():
                 config.inter_op_parallelism_threads = max(2, (multiprocessing.cpu_count() // hvd.size()) - 2)
+                print("config.inter_op_parallelism_threads",config.inter_op_parallelism_threads)
             else:
                 config.inter_op_parallelism_threads = 4
 
