@@ -98,8 +98,7 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
             cycle_length=10,
             block_length=8,
             sloppy=not deterministic,
-            prefetch_input_elements=16,
-            num_parallel_calls=8
+            prefetch_input_elements=16
         )
     )
 
