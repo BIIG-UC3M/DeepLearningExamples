@@ -76,7 +76,7 @@ def get_synth_input_fn(batch_size, height, width, num_channels, data_format, num
 
 
 def get_tfrecords_input_fn(filenames, batch_size, height, width, training, distort_color, num_threads, deterministic):
-    shuffle_buffer_size = 4096
+    shuffle_buffer_size = 1024
 
     if deterministic:
         if hvd_utils.is_using_hvd():
@@ -104,9 +104,7 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     # )
 
     counter = tf.data.Dataset.range(sys.maxsize)
-    print("ds before", ds)
     ds = tf.data.Dataset.zip((ds, counter))
-    print("ds after", ds)
 
     def preproc_func(record, counter_):
         return image_processing.preprocess_image_record(record, height, width, _NUM_CHANNELS, training)
@@ -114,7 +112,6 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     ds = ds.cache()
     
     if training:
-
         #ds = ds.apply(tf.data.experimental.shuffle_and_repeat(buffer_size=shuffle_buffer_size, seed=seed))
         ds = ds.shuffle(shuffle_buffer_size, seed=seed)
         ds = ds.repeat()
@@ -122,14 +119,17 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     else:
         ds = ds.repeat()
 
-    ds = ds.apply(
-        tf.data.experimental.map_and_batch(
-            map_func=preproc_func,
-            num_parallel_calls=num_threads,
-            batch_size=batch_size,
-            drop_remainder=True,
-        )
-    )
+    ds = ds.map(preproc_func, 8)
+    ds = ds.batch(batch_size, drop_remainder=True)
+    #
+    # ds = ds.apply(
+    #     tf.data.experimental.map_and_batch(
+    #         map_func=preproc_func,
+    #         num_parallel_calls=num_threads,
+    #         batch_size=batch_size,
+    #         drop_remainder=True,
+    #     )
+    # )
 
     #ds = ds.prefetch(buffer_size=tf.contrib.data.AUTOTUNE)
     ds = ds.prefetch(None)
