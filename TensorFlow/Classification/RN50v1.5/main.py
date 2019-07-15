@@ -29,6 +29,8 @@ from runtime import Runner
 
 from utils.cmdline_helper import parse_cmdline
 
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
 if __name__ == "__main__":
 
     tf.logging.set_verbosity(tf.logging.ERROR)
