@@ -113,7 +113,9 @@ def get_tfrecords_input_fn(filenames, batch_size, height, width, training, disto
     
     if training:
 
-        ds = ds.apply(tf.data.experimental.shuffle_and_repeat(buffer_size=shuffle_buffer_size, seed=seed))
+        #ds = ds.apply(tf.data.experimental.shuffle_and_repeat(buffer_size=shuffle_buffer_size, seed=seed))
+        ds = ds.shuffle(shuffle_buffer_size, seed=seed)
+        ds = ds.repeat()
 
     else:
         ds = ds.repeat()
