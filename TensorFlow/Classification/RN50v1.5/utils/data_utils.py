@@ -76,8 +76,6 @@ def get_synth_input_fn(batch_size, height, width, num_channels, data_format, num
 
 
 def get_tfrecords_input_fn(filenames, batch_size, height, width, training, distort_color, num_threads, deterministic):
-    print("Yo soy tu madre")
-
     shuffle_buffer_size = 4096
 
     if deterministic:

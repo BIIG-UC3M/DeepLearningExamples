@@ -133,7 +133,7 @@ class Runner(object):
         )
 
         run_config_performance = tf.contrib.training.HParams(
-            num_preprocessing_threads=32,
+            num_preprocessing_threads=12, #TODO this dynamic?
             use_tf_amp=use_tf_amp,
             use_xla=use_xla,
         )
